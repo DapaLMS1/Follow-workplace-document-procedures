@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A New Spring - Interactive Learning Activity</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Define brand colors and font stack as CSS variables for easy management */
+        :root {
+            --primary-purple: #532A8C;
+            --light-purple: #9D8ABB;
+            --accent-green: #7ABF49;
+            --light-green: #96BF78;
+            --light-grey: #F2F2F2;
+            --lighter-purple: #C3ACE8;
+            --font-stack: 'Open Sans', sans-serif;
+            --activity-background-blue: #E6F2FF; /* Based on the image provided */
+        }
+
+        /* Basic body styling to center the activity and set the base font */
+        body {
+            font-family: var(--font-stack);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+            margin: 0;
+            background-color: var(--light-grey); /* General page background */
+            overflow: hidden; /* Prevents scrollbars if elements slightly exceed bounds */
+        }
+
+        /* Main container for the word circle activity */
+        .word-circle-container {
+            position: relative;
+            width: 630px; /* Overall activity width */
+            height: 630px; /* Overall activity height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%; /* Makes it a perfect circle */
+            background-color: var(--activity-background-blue); /* Background color matching the image */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05); /* Optional subtle inner shadow for depth */
+        }
+
+        /* Styling for the central circle where content appears */
+        .center-circle {
+            width: 300px; /* Size of the inner circle */
+            height: 300px;
+            background-color: var(--primary-purple); /* Brand purple for the center */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--light-grey); /* Text color for readability */
+            font-size: 1.1em; /* Adjusted font size for text to fit */
+            line-height: 1.4; /* Improves readability of multi-line text */
+            padding: 20px; /* Internal padding for text */
+            box-sizing: border-box; /* Ensures padding is included in width/height */
+            transition: background-color 0.3s ease; /* Smooth transition for background changes */
+            z-index: 2; /* Ensures it's above outer circles if they overlap slightly */
+            font-weight: 600; /* Open Sans Semi-Bold */
+        }
+
+        .center-circle p {
+            margin: 0; /* Remove default paragraph margin */
+        }
+
+        /* Wrapper for outer circles to allow absolute positioning within the container */
+        .outer-circles-wrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        /* Styling for each small outer clickable circle (the "dots") */
+        .outer-circle {
+            position: absolute;
+            width: 60px; /* NEW SIZE: Small dots as per your request */
+            height: 60px; /* NEW SIZE: Small dots as per your request */
+            background-color: #FFFFFF; /* White background as per your image */
+            border-radius: 50%; /* Makes them perfect circles */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* To stack image and heading (though heading is hidden) */
+            cursor: pointer; /* Indicates clickability */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Lighter shadow for small dots */
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            z-index: 1; /* Ensures they are below the center circle initially */
+        }
+
+        /* Hover effect for outer circles */
+        .outer-circle:hover {
+            transform: scale(1.2); /* Slightly enlarge on hover for emphasis */
+            background-color: var(--accent-green); /* Changes color on hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow on hover */
+        }
+
+        /* Style for the currently selected outer circle */
+        .outer-circle.active {
+            background-color: var(--lighter-purple); /* Highlights the active circle */
+            box-shadow: 0 0 0 3px var(--primary-purple); /* A border highlight for active state */
+        }
+
+        /* Styling for images inside the outer circles */
+        .outer-circle img {
+            max-width: 70%; /* Image will be max 70% of the 60px circle (42px) */
+            max-height: 70%;
+            display: block; /* Removes extra space below image */
+            transition: opacity 0.3s ease;
+        }
+
+        /* Styling for the heading that appears on hover */
+        .outer-circle .hover-heading {
+            position: absolute;
+            bottom: -30px; /* Position below the circle */
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+            color: var(--light-grey); /* White text */
+            padding: 5px 10px;
+            border-radius: 5px;
+            opacity: 0; /* Hidden by default */
+            visibility: hidden; /* Hidden by default */
+            transition: opacity 0.3s ease, visibility 0.3s ease; /* Smooth fade in/out */
+            white-space: nowrap; /* Prevents heading text from wrapping */
+            font-size: 0.9em; /* Slightly smaller font size for hover heading */
+        }
+
+        /* Show the heading on hover */
+        .outer-circle:hover .hover-heading {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="word-circle-container">
+        <div class="center-circle">
+            <p id="centerText">Select an outer circle to learn more!</p>
+        </div>
+        <div class="outer-circles-wrapper">
+            <div class="outer-circle" data-text="Maintaining an accurate injury register with worker details, injury nature, and cause.">
+                <img src="YOUR_GITHUB_RAW_LINK_FOR_ICON_1.png" alt="Maintain Records Icon">
+                <div class="hover-heading"><h3>Maintain Records</h3></div>
+            </div>
+            <div class="outer-circle" data-text="Preserving incident sites for potential inspections.">
+                <img src="YOUR_GITHUB_RAW_LINK_FOR_ICON_2.png" alt="Inspections Icon">
+                <div class="hover-heading"><h3>Inspections</h3></div>
+            </div>
+            <div class="outer-circle" data-text="Following emergency procedures and documenting all incidents.">
+                <img src="YOUR_GITHUB_RAW_LINK_FOR_ICON_3.png" alt="Procedures Icon">
+                <div class="hover-heading"><h3>Follow Procedures</h3></div>
+            </div>
+            <div class="outer-circle" data-text="Employee duties include reporting injuries, seeking medical treatment, and complying with return-to-work plans.">
+                <img src="YOUR_GITHUB_RAW_LINK_FOR_ICON_4.png" alt="Employee Duties Icon">
+                <div class="hover-heading"><h3>Employee Duties</h3></div>
+            </div>
+            </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get references to the HTML elements
+            const centerTextElement = document.getElementById('centerText');
+            const outerCircles = document.querySelectorAll('.outer-circle'); // Select all outer circles
+            const numberOfCircles = outerCircles.length; // Get the total count of outer circles
+
+            // Define the dimensions based on your CSS and overall design
+            const containerWidth = 630; // Matches .word-circle-container width
+            const outerCircleSize = 60; // Matches .outer-circle width/height
+
+            // Calculate the radius for positioning the outer circles
+            // This formula places the outer edge of the small circles aligned with the outer edge of the main container.
+            const radius = (containerWidth / 2) - (outerCircleSize / 2); // (630 / 2) - (60 / 2) = 315 - 30 = 285px
+
+            // Calculate the center point of the main container
+            const centerX = containerWidth / 2; // 315
+            const centerY = containerWidth / 2; // 315
+
+            // Function to dynamically position outer circles around the center
+            function positionOuterCircles() {
+                outerCircles.forEach((circle, index) => {
+                    // Calculate the angle for each circle to distribute them evenly
+                    const angle = (index / numberOfCircles) * 2 * Math.PI; // Angle in radians (full circle is 2*PI)
+
+                    // Calculate the x and y coordinates for the center of each outer circle
+                    const x = centerX + radius * Math.cos(angle) - (circle.offsetWidth / 2);
+                    const y = centerY + radius * Math.sin(angle) - (circle.offsetHeight / 2);
+
+                    // Apply the calculated position to the circle's style
+                    circle.style.left = `${x}px`;
+                    circle.style.top = `${y}px`;
+                });
+            }
+
+            // Call the positioning function when the page loads
+            positionOuterCircles();
+
+            // Add click event listeners to each outer circle
+            outerCircles.forEach(circle => {
+                circle.addEventListener('click', () => {
+                    // Get the content to display from the 'data-text' attribute of the clicked circle
+                    const contentToShow = circle.getAttribute('data-text');
+
+                    // Update the text content of the center circle
+                    centerTextElement.textContent = contentToShow;
+                    // Ensure the text color is visible against the center circle's background
+                    centerTextElement.style.color = 'var(--light-grey)';
+
+                    // --- Handle active state for outer circles ---
+                    // Remove 'active' class from all outer circles first
+                    outerCircles.forEach(oc => oc.classList.remove('active'));
+                    // Add 'active' class to the currently clicked circle
+                    circle.classList.add('active');
+
+                    // Optional: You could add more animations or effects here
+                    // e.g., if you want the center circle's background to momentarily change
+                    // document.querySelector('.center-circle').style.backgroundColor = getComputedStyle(circle).backgroundColor;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
